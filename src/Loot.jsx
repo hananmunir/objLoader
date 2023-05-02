@@ -17,6 +17,7 @@ export function Model(props) {
   const meshRef = useRef(nodes.feet_low_Kang_low011);
   const leftEyeRef = useRef();
   const rightEyeRef = useRef();
+  const bodyRef = useRef();
   const headRef = useRef();
   const [loaded, setLoaded] = useState(false);
   const { camera } = useThree();
@@ -126,8 +127,55 @@ export function Model(props) {
         targetY * 0.3,
         0.02
       );
+      leftEyeRef.current.rotation.y = THREE.MathUtils.lerp(
+        leftEyeRef.current.rotation.y,
+        targetX * 0.5,
+        0.03
+      );
+
+      //Vertical
+      leftEyeRef.current.rotation.x = THREE.MathUtils.lerp(
+        leftEyeRef.current.rotation.x,
+        targetY * 0.2,
+        0.03
+      );
+      rightEyeRef.current.rotation.y = THREE.MathUtils.lerp(
+        rightEyeRef.current.rotation.y,
+        targetX * 0.5,
+        0.03
+      );
+
+      //Vertical
+      rightEyeRef.current.rotation.x = THREE.MathUtils.lerp(
+        rightEyeRef.current.rotation.x,
+        targetY * 0.2,
+        0.03
+      );
+      bodyRef.current.rotation.y = THREE.MathUtils.lerp(
+        bodyRef.current.rotation.y,
+        targetX * 0.4,
+        0.02
+      );
+
+      //Vertical
+      bodyRef.current.rotation.x = THREE.MathUtils.lerp(
+        bodyRef.current.rotation.x,
+        targetY * 0.15,
+        0.02
+      );
     }
   });
+
+  useEffect(() => {
+    if (rightEyeRef.current) {
+      rightEyeRef.current.geometry.center();
+      //position the eye
+      //rightEyeRef.current.position(0.1, 0.1, 0.1);
+      leftEyeRef.current.geometry.center();
+    }
+  }, [rightEyeRef.current]);
+
+  console.log(leftEyeRef.current);
 
   window.addEventListener("keydown", handleKeyDown);
 
@@ -137,25 +185,45 @@ export function Model(props) {
         <group {...props} dispose={null}>
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
-          {/* Legs */}
+          <group ref={bodyRef}>
+            {/* Legs */}
 
-          <mesh
-            geometry={nodes.feet_low_Kang_low011.geometry}
-            material={nodes.feet_low_Kang_low011.material}
-            position={[0, 0, 0.1]}
-            ref={meshRef}
-          />
+            <mesh
+              geometry={nodes.feet_low_Kang_low011.geometry}
+              material={nodes.feet_low_Kang_low011.material}
+              position={[0, 0, 0.1]}
+              ref={meshRef}
+            />
 
-          {/* Hands */}
-          <mesh
-            geometry={nodes.hands_low_Kang_low015.geometry}
-            material={nodes.hands_low_Kang_low015.material}
-          />
-          <mesh
-            geometry={nodes.Properties_Text.geometry}
-            material={nodes.Properties_Text.material}
-          />
+            {/* Hands */}
+            <mesh
+              geometry={nodes.hands_low_Kang_low015.geometry}
+              material={nodes.hands_low_Kang_low015.material}
+            />
+            <mesh
+              geometry={nodes.Properties_Text.geometry}
+              material={nodes.Properties_Text.material}
+            />
+          </group>
+
           <group ref={headRef}>
+            {/* Eye */}
+
+            <mesh
+              position={[-0.2, 0.95, 0.48]}
+              ref={leftEyeRef}
+              geometry={nodes.DMAD_cornea_l_Sphere010.geometry}
+              material={nodes.DMAD_cornea_l_Sphere010.material}
+            />
+
+            <mesh
+              position={[0.2, 0.95, 0.5]}
+              ref={rightEyeRef}
+              geometry={nodes.DMAD_cornea_r_Sphere005.geometry}
+              material={nodes.DMAD_cornea_l_Sphere010.material}
+            />
+
+            {/* Eye */}
             {/* Hat */}
             <mesh
               geometry={nodes.beanie_Cube001.geometry}
@@ -201,17 +269,6 @@ export function Model(props) {
             <mesh
               geometry={nodes.DMAD_iris_l_Sphere001.geometry}
               material={nodes.DMAD_iris_l_Sphere001.material}
-            />
-            {/* Eye */}
-            <mesh
-              geometry={nodes.DMAD_cornea_l_Sphere010.geometry}
-              material={nodes.DMAD_cornea_l_Sphere010.material}
-            />
-            {/* Eye */}
-
-            <mesh
-              geometry={nodes.DMAD_cornea_r_Sphere005.geometry}
-              material={nodes.DMAD_cornea_l_Sphere010.material}
             />
 
             {/* Eye */}
