@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useGLTF, Html } from "@react-three/drei";
+import { useGLTF, Html, Sphere } from "@react-three/drei";
 import * as THREE from "three";
 
 import { useEffect, useState } from "react";
@@ -13,7 +13,10 @@ export function Model(props) {
   const armtexture = new THREE.TextureLoader().load("/wooden.png");
   const hatTextue = new THREE.TextureLoader().load("/red.png");
   const starTexture = new THREE.TextureLoader().load("/star.png");
+  const eyeTexture = new THREE.TextureLoader().load("/eye.png");
   const meshRef = useRef(nodes.feet_low_Kang_low011);
+  const leftEyeRef = useRef();
+  const rightEyeRef = useRef();
   const headRef = useRef();
   const [loaded, setLoaded] = useState(false);
   const { camera } = useThree();
@@ -72,10 +75,14 @@ export function Model(props) {
       color: 0xffffff,
     });
 
+    const corneaMaterial = new THREE.MeshBasicMaterial({
+      map: eyeTexture,
+    });
     nodes.hands_low_Kang_low015.material = handMaterial;
     nodes.beanie_Cube001.material = hatmaterial;
     nodes.Kang_low.material = starMaterial;
     nodes.feet_low_Kang_low011.material = handMaterial;
+    nodes.DMAD_cornea_l_Sphere010.material = corneaMaterial;
     setLoaded(true);
   }, [armtexture, nodes.hands_low_Kang_low015.material]);
 
@@ -109,14 +116,14 @@ export function Model(props) {
       //Horizontal
       headRef.current.rotation.y = THREE.MathUtils.lerp(
         headRef.current.rotation.y,
-        targetX,
+        targetX * 0.7,
         0.02
       );
 
       //Vertical
       headRef.current.rotation.x = THREE.MathUtils.lerp(
         headRef.current.rotation.x,
-        targetY,
+        targetY * 0.3,
         0.02
       );
     }
@@ -132,23 +139,23 @@ export function Model(props) {
           <pointLight position={[10, 10, 10]} />
           {/* Legs */}
 
-          <group ref={headRef}>
-            <mesh
-              geometry={nodes.feet_low_Kang_low011.geometry}
-              material={nodes.feet_low_Kang_low011.material}
-              position={[0, 0, 0.1]}
-              ref={meshRef}
-            />
+          <mesh
+            geometry={nodes.feet_low_Kang_low011.geometry}
+            material={nodes.feet_low_Kang_low011.material}
+            position={[0, 0, 0.1]}
+            ref={meshRef}
+          />
 
-            {/* Hands */}
-            <mesh
-              geometry={nodes.hands_low_Kang_low015.geometry}
-              material={nodes.hands_low_Kang_low015.material}
-            />
-            <mesh
-              geometry={nodes.Properties_Text.geometry}
-              material={nodes.Properties_Text.material}
-            />
+          {/* Hands */}
+          <mesh
+            geometry={nodes.hands_low_Kang_low015.geometry}
+            material={nodes.hands_low_Kang_low015.material}
+          />
+          <mesh
+            geometry={nodes.Properties_Text.geometry}
+            material={nodes.Properties_Text.material}
+          />
+          <group ref={headRef}>
             {/* Hat */}
             <mesh
               geometry={nodes.beanie_Cube001.geometry}
@@ -201,10 +208,12 @@ export function Model(props) {
               material={nodes.DMAD_cornea_l_Sphere010.material}
             />
             {/* Eye */}
+
             <mesh
               geometry={nodes.DMAD_cornea_r_Sphere005.geometry}
-              material={nodes.DMAD_cornea_r_Sphere005.material}
+              material={nodes.DMAD_cornea_l_Sphere010.material}
             />
+
             {/* Eye */}
             <mesh
               geometry={nodes.DMAD_iris_r_Sphere006.geometry}
