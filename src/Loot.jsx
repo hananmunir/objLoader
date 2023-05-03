@@ -14,6 +14,10 @@ export function Model(props) {
   const hatTextue = new THREE.TextureLoader().load("/red.png");
   const starTexture = new THREE.TextureLoader().load("/star.png");
   const eyeTexture = new THREE.TextureLoader().load("/eye.png");
+  eyeTexture.wrapS = THREE.RepeatWrapping;
+  eyeTexture.wrapT = THREE.RepeatWrapping;
+  eyeTexture.repeat.set(1, 1);
+
   const meshRef = useRef(nodes.feet_low_Kang_low011);
   const leftEyeRef = useRef();
   const rightEyeRef = useRef();
@@ -208,21 +212,18 @@ export function Model(props) {
 
           <group ref={headRef}>
             {/* Eye */}
-
             <mesh
-              position={[-0.2, 0.95, 0.48]}
+              position={[-0.2, 0.95, 0.45]}
               ref={leftEyeRef}
-              geometry={nodes.DMAD_cornea_l_Sphere010.geometry}
+              geometry={nodes.DMAD_cornea_r_Sphere005.geometry}
               material={nodes.DMAD_cornea_l_Sphere010.material}
             />
-
             <mesh
-              position={[0.2, 0.95, 0.5]}
+              position={[0.2, 0.95, 0.45]}
               ref={rightEyeRef}
               geometry={nodes.DMAD_cornea_r_Sphere005.geometry}
               material={nodes.DMAD_cornea_l_Sphere010.material}
             />
-
             {/* Eye */}
             {/* Hat */}
             <mesh
@@ -254,7 +255,6 @@ export function Model(props) {
               geometry={nodes.mouth_low001_Kang_low003.geometry}
               material={nodes.mouth_low001_Kang_low003.material}
             />
-
             {/* Face */}
             <mesh
               geometry={nodes["kangVF_head_(1)_kangVF_head_(1)002"].geometry}
@@ -266,16 +266,17 @@ export function Model(props) {
               material={nodes.hair_low001_Kang_low001.material}
             />
             {/* Eye */}
-            <mesh
+            {/* <mesh
               geometry={nodes.DMAD_iris_l_Sphere001.geometry}
               material={nodes.DMAD_iris_l_Sphere001.material}
             />
 
-            {/* Eye */}
+            {/* Eye 
             <mesh
               geometry={nodes.DMAD_iris_r_Sphere006.geometry}
               material={nodes.DMAD_iris_r_Sphere006.material}
             />
+            */}
             {/* Cap Star */}
             <mesh
               geometry={nodes.Kang_low.geometry}
